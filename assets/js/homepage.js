@@ -24,7 +24,8 @@ var getUserRepos = function(user) {
 var formSubmitHandler = function(event) {
   event.preventDefault(); //prevent browser default action upon submitting
   // get value from input element
-var username = nameInputEl.value.trim(); // username and ensure there is not space at the beginning and ending of string
+var username = nameInputEl.value.trim(); // username and ensure there is not space at the 
+                                         // beginning and ending of string 
 
 if (username) { //if there is a username value
   getUserRepos(username); //input username value into fetch function
