@@ -2,6 +2,7 @@ var userFormEl = document.querySelector("#user-form");  //grab form element
 var nameInputEl = document.querySelector("#username"); //grab a specified username
 var repoContainerEl = document.querySelector("#repos-container"); //grab repo list container div
 var repoSearchTerm = document.querySelector("#repo-search-term"); // grab searched term display span
+var languageButtonsEl = document.querySelector("#language-buttons")
 var getUserRepos = function(user) {
   // format the github api url
   var apiUrl = "https://api.github.com/users/" + user + "/repos"; //api endpoint url that accepts username input varible
@@ -35,6 +36,22 @@ if (username) { //if there is a username value
 }
   console.log(event);
 }
+
+// use a function with a language parameter to fetch a featured repo
+var getFeaturedRepos = function(language) {
+  var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
+
+  fetch(apiUrl).then(function(response) {
+    if (response.ok) {
+      response.json().then(function(data) {
+        displayRepos(data.items, language);
+      })
+    }else {
+      alert('error: GitHub User Not Found')
+    };
+  });
+};
+
 
 //function to accept both arrays of repo data and the term we searched for as parameters
 var displayRepos = function(repos, searchTerm) {
@@ -85,4 +102,16 @@ repoEl.appendChild(statusEl);
   console.log(repos);
 };
 
+// buttons event function
+var buttonClickHandler = function(event) {
+  var language = event.target.getAttribute("data-language");
+  if(language) {
+  getFeaturedRepos(language);
+
+  // clear old content
+  repoContainerEl.textContent = "";
+  }
+}
+
 userFormEl.addEventListener("submit", formSubmitHandler);
+languageButtonsEl.addEventListener("click", buttonClickHandler);
